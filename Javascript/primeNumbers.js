@@ -6,7 +6,7 @@ const highNumber = parseInt(arguments[1]);
 function showPrimeNumbers(lowNumber, highNumber) {
     for(let i = lowNumber; i <= highNumber; i++) {
         let isPrime = true;
-        if(i === 1) {
+        if(i <= 1) {
             isPrime = false;
         }
         for(let j = 2; j < i; j++) {
