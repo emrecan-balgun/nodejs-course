@@ -1,3 +1,4 @@
+// Description: This program calculates the area of a circle with a given radius
 const arguments = process.argv[2];
 
 const radius = parseInt(arguments);
