@@ -65,3 +65,6 @@ const fs = require('fs');
 //         console.log("Directory deleted successfully!");
 //     }
 // });
+
+// Print current directory
+// console.log(__dirname);
