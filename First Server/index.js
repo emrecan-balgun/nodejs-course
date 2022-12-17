@@ -5,6 +5,7 @@ const server = http.createServer((req, res) => {
     // console.log("Request received");
     const url = req.url;
     if(url === '/') {
+        //can't send style tags without using res.writeHead
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write("<h1>Index Page</h1>");
     } else if(url === '/about') {
