@@ -48,5 +48,5 @@ const Photo = mongoose.model('Photo', PhotoSchema);
 // delete a photo
 // const id = '63a44d1d140ea7460e907c77';
 // Photo.findByIdAndDelete(id, (err, data) => {
-//   console.log(data);
+//   console.log('Photo is removed');
 // });
