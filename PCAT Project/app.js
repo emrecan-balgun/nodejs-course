@@ -79,10 +79,11 @@ app.get('/photos/edit/:id', async (req, res) => {
 });
 
 app.put('/photos/:id', async (req, res) => {
-  let photo = await Photo.findById(req.params.id);
-  photo.title = req.body.title;
-  photo.description = req.body.description;
-  await photo.save();
+  await Photo.findByIdAndUpdate(req.params.id, req.body);
+  // let photo = await Photo.findById(req.params.id);
+  // photo.title = req.body.title;
+  // photo.description = req.body.description;
+  // await photo.save();
 
   res.redirect(`/photos/${req.params.id}`);
 });
