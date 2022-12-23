@@ -20,8 +20,8 @@
             <div class="mx-auto tm-content-container">
                 <main>
                     <div class="row mb-5 pb-4">
-                        <div class="col-12">
-                            <img src="/img/tn-01.jpg" alt="Image" class="img-fluid tm-catalog-item-img">
+                        <div class="col-12 text-center">
+                            <img src="<%= photo.image %>" alt="Image" class="img-fluid tm-catalog-item-img">
                         </div>
                     </div>
                     <div class="row mb-5 pb-5">
@@ -51,6 +51,8 @@
                 </main>
 
                 <!-- Subscribe form and footer links -->
+                <script src="js/jquery-3.4.1.min.js"></script>
+                <script src="js/bootstrap.min.js"></script>
                 <%- include('partials/_footer') -%>
 </body>
 
