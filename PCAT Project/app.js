@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
 const methodOverride = require('method-override');
+const dotenv = require('dotenv');
 
 const ejs = require('ejs');
 const path = require('path');
@@ -13,15 +14,24 @@ const pageController = require('./controllers/pageControllers');
 
 const app = express();
 const PORT = 3000;
+dotenv.config();
 
 // use strict to false (for warning)
 mongoose.set('strictQuery', false);
 
 // connect DB
-mongoose.connect('mongodb://localhost/pcat-test-db', {
+// mongoose.connect('mongodb://localhost/pcat-test-db', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.abdismo.mongodb.net/?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+}).then(() => {
+  console.log('DB Connected!');
+}).catch(err => {
+  console.log(`DB Connection Error: ${err}`);
+})
 
 // TEMPLATE ENGINE
 app.set('view engine', 'ejs');
@@ -48,6 +58,6 @@ app.get('/about', pageController.getAboutPage);
 app.get('/add', pageController.getAddPage);
 app.get('/photos/edit/:id', pageController.getEditPage);
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running on port ${PORT}`);
 });
