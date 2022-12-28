@@ -13,7 +13,6 @@ const photoController = require('./controllers/photoControllers');
 const pageController = require('./controllers/pageControllers');
 
 const app = express();
-const PORT = 3000;
 dotenv.config();
 
 // use strict to false (for warning)
@@ -24,7 +23,7 @@ mongoose.set('strictQuery', false);
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 // });
-mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.abdismo.mongodb.net/?retryWrites=true&w=majority`, {
+mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.abdismo.mongodb.net/pcat-app?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
@@ -59,5 +58,5 @@ app.get('/add', pageController.getAddPage);
 app.get('/photos/edit/:id', pageController.getEditPage);
 
 app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${process.env.PORT}`);
 });

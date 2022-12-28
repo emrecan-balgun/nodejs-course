@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const dotenv = require('dotenv');
 
 const ejs = require('ejs');
 
@@ -8,16 +9,24 @@ const postControllers = require('./controllers/postControllers');
 const pageControllers = require('./controllers/pageControllers');
 
 const app = express();
-const PORT = 3001;
+dotenv.config();
 
 // use strict to false (for warning)
 mongoose.set('strictQuery', false);
 
 // connect DB
-mongoose.connect('mongodb://localhost/cleanblog-test-db', {
+// mongoose.connect('mongodb://localhost/cleanblog-test-db', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.abdismo.mongodb.net/cleanblog-app?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+}).then(() => {
+  console.log('DB Connected!');
+}).catch(err => {
+  console.log(`DB Connection Error: ${err}`);
+})
 
 // TEMPLATE ENGINE
 app.set('view engine', 'ejs');
@@ -43,6 +52,6 @@ app.get('/about', pageControllers.getAboutPage);
 app.get('/add', pageControllers.getAddPage);
 app.get('/posts/edit/:id', pageControllers.getEditPage);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });

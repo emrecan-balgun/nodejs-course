@@ -1,9 +1,25 @@
 const Post = require('../models/Post');
 
 exports.getAllPosts = async (req, res) => {
-  const posts = await Post.find({}).sort('-createdDate'); // -createdDate: descending order (the last uploaded item appears first)
+  // const posts = await Post.find({}).sort('-createdDate'); // -createdDate: descending order (the last uploaded item appears first)
+  // res.render('index', {
+  //   posts,
+  // });
+
+  const page = req.query.page || 1;
+  const postsPerPage = 3;
+
+  const totalPosts = await Post.find().countDocuments();
+
+  const posts = await Post.find({})
+    .sort('-createdDate')
+    .skip((page - 1) * postsPerPage)
+    .limit(postsPerPage);
+
   res.render('index', {
     posts,
+    current: page,
+    pages: Math.ceil(totalPosts / postsPerPage),
   });
 };
 
