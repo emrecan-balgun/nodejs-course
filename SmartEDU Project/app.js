@@ -12,11 +12,15 @@ app.use(express.static('public'));
 
 // Routes
 app.get('/', (req, res) => {
-  res.status(200).render('index');
+  res.status(200).render('index', {
+    page_name: 'index',
+  });
 });
 
 app.get('/about', (req, res) => {
-  res.status(200).render('about');
+  res.status(200).render('about', {
+    page_name: 'about',
+  });
 });
 
 app.listen(process.env.PORT || 5000, () => {
