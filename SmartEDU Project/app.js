@@ -4,8 +4,19 @@ const dotenv = require('dotenv');
 const app = express();
 dotenv.config();
 
+// Template Engine
+app.set('view engine', 'ejs');
+
+// Middlewares
+app.use(express.static('public'));
+
+// Routes
 app.get('/', (req, res) => {
-  res.status(200).send('Hello World!');
+  res.status(200).render('index');
+});
+
+app.get('/about', (req, res) => {
+  res.status(200).render('about');
 });
 
 app.listen(process.env.PORT || 5000, () => {
