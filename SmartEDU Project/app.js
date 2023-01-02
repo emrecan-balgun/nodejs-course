@@ -9,10 +9,13 @@ const app = express();
 dotenv.config();
 
 // Mongoose Config
-mongoose.set('strictQuery', false); 
+mongoose.set('strictQuery', false);
 
 // Connect to MongoDB
-mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.abdismo.mongodb.net/smartedu`)
+mongoose
+  .connect(
+    `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.abdismo.mongodb.net/smartedu`
+  )
   .then(() => console.log('Connected DB!'));
 
 // Template Engine
@@ -20,8 +23,8 @@ app.set('view engine', 'ejs');
 
 // Middlewares
 app.use(express.static('public'));
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // Routes
 app.use('/', pageRoute);
