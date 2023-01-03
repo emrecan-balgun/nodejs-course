@@ -1,4 +1,5 @@
 const Course = require('../models/Course');
+const Category = require('../models/Category');
 
 exports.createCourse = async (req, res) => {
   try {
@@ -20,9 +21,11 @@ exports.createCourse = async (req, res) => {
 exports.getAllCourse = async (req, res) => {
   try {
     const courses = await Course.find().sort({ createdAt: -1 });
+    const categories = await Category.find();
     res.status(200).render('courses', {
       page_name: 'courses',
       courses,
+      categories,
     });
     // res.status(200).json({
     //   status: 'success',

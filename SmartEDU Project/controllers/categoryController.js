@@ -16,3 +16,20 @@ exports.createCategory = async (req, res) => {
     });
   }
 };
+
+exports.getAllCategory = async (req, res) => {
+  try {
+    const categories = await Category.find();
+    res.status(200).json({
+      status: 'success',
+      data: {
+        categories,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      message: error,
+    });
+  }
+};
