@@ -20,19 +20,21 @@ exports.createCourse = async (req, res) => {
 
 exports.getAllCourse = async (req, res) => {
   try {
-    const courses = await Course.find().sort({ createdAt: -1 });
+    const categorySlug = req.query.category;
+
+    let filter = {};
+    if (categorySlug) {
+      const category = await Category.findOne({ slug: categorySlug });
+      filter = { category: category._id };
+    }
+
+    const courses = await Course.find(filter).sort({ createdAt: -1 });
     const categories = await Category.find();
     res.status(200).render('courses', {
       page_name: 'courses',
       courses,
       categories,
     });
-    // res.status(200).json({
-    //   status: 'success',
-    //   data: {
-    //     courses,
-    //   },
-    // });
   } catch (error) {
     res.status(400).json({
       status: 'fail',
