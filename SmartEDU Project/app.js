@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
+const categoryRoute = require('./routes/categoryRoute');
 
 const app = express();
 dotenv.config();
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 // Routes
 app.use('/', pageRoute);
 app.use('/courses', courseRoute);
+app.use('/categories', categoryRoute);
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
