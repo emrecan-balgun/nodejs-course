@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
@@ -23,12 +25,30 @@ mongoose
 // Template Engine
 app.set('view engine', 'ejs');
 
+// Global Variable
+global.userIN = null;
+
 // Middlewares
 app.use(express.static('public'));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.abdismo.mongodb.net/smartedu`,
+      touchAfter: 24 * 3600, // time period in seconds (24 hours)
+    }),
+  })
+);
 
 // Routes
+app.use('*', (req, res, next) => {
+  userIN = req.session.userID;
+  next();
+});
 app.use('/', pageRoute);
 app.use('/courses', courseRoute);
 app.use('/categories', categoryRoute);

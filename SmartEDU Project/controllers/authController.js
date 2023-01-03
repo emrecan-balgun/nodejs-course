@@ -1,5 +1,7 @@
-const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const session = require('express-session');
+
+const User = require('../models/User');
 
 exports.signup = async (req, res) => {
   try {
@@ -26,7 +28,9 @@ exports.signin = async (req, res) => {
       bcrypt.compare(password, user.password, (err, same) => {
         if (same) {
           // user session
-          res.status(200).send('Logged in');
+          req.session.userID = user._id;
+          // res.status(200).send('Logged in');
+          res.status(200).redirect('/');
         } else {
           res.status(401).send('Incorrect password or email');
         }
@@ -38,4 +42,10 @@ exports.signin = async (req, res) => {
       error,
     });
   }
+};
+
+exports.signout = (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
 };
