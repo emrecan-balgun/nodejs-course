@@ -30,7 +30,7 @@ exports.signin = async (req, res) => {
           // user session
           req.session.userID = user._id;
           // res.status(200).send('Logged in');
-          res.status(200).redirect('/');
+          res.status(200).redirect('/users/dashboard');
         } else {
           res.status(401).send('Incorrect password or email');
         }
@@ -50,8 +50,10 @@ exports.signout = (req, res) => {
   });
 };
 
-exports.getDashboardPage = (req, res) => {
+exports.getDashboardPage = async (req, res) => {
+  const user = await User.findById(req.session.userID);
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
+    user,
   });
 };
