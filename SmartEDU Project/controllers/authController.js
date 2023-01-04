@@ -49,3 +49,9 @@ exports.signout = (req, res) => {
     res.redirect('/');
   });
 };
+
+exports.getDashboardPage = (req, res) => {
+  res.status(200).render('dashboard', {
+    page_name: 'dashboard',
+  });
+};
