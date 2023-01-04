@@ -2,9 +2,11 @@
 
 <%- include('partials/_navigation') -%>
 
+<% if(user) { %>
+
 <div class="all-title-box">
 	<div class="container text-center">
-		<h1>DASHBOARD<span class="m_1">Lorem Ipsum dolroin gravida nibh vel velit.</span></h1>
+		<h1>DASHBOARD<span class="m_1"><%= user.role %></span></h1>
 	</div>
 </div>
 
@@ -17,9 +19,7 @@
 						<h3 class="author_name"><a href="#"><%= user.name %></a></h3>
 						<h5><%= user.email %></h5>
 						<p class="author_det">
-							Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt ut aut
-							reiciendise voluptat maiores alias consequaturs aut perferendis doloribus omnis saperet
-							docendi nec, eos ea alii molestiae aliquand.
+							<%= user.role %>
 						</p>
 					</div>
 					<div class="author-desc">
@@ -98,5 +98,7 @@
 		</div><!-- end row -->
 	</div><!-- end container -->
 </div><!-- end section -->
+
+<% } %>
 
 <%- include('partials/_footer') -%>
