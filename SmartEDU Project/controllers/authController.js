@@ -54,8 +54,8 @@ exports.signout = (req, res) => {
 };
 
 exports.getDashboardPage = async (req, res) => {
-  const user = await User.findById(req.session.userID);
-  const courses = await Course.find({ user: req.session.userID });
+  const user = await User.findById(req.session.userID).populate('courses'); // populate() is used to get the data from the referenced document (https://mongoosejs.com/docs/populate.html) // for ex: user.courses
+  const courses = await Course.find({ user: req.session.userID }); // for instructor
   const categories = await Category.find();
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
