@@ -3,6 +3,7 @@ const session = require('express-session');
 
 const User = require('../models/User');
 const Category = require('../models/Category');
+const Course = require('../models/Course');
 
 exports.signup = async (req, res) => {
   try {
@@ -54,10 +55,12 @@ exports.signout = (req, res) => {
 
 exports.getDashboardPage = async (req, res) => {
   const user = await User.findById(req.session.userID);
+  const courses = await Course.find({ user: req.session.userID });
   const categories = await Category.find();
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     user,
     categories,
+    courses,
   });
 };

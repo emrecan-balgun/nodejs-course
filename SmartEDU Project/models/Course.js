@@ -26,11 +26,15 @@ const CourseSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }
 });
 
 CourseSchema.pre('validate', function (next) {
   // pre-save hook (https://mongoosejs.com/docs/middleware.html#pre)
-  // i use function because i need to use this keyword (https://stackoverflow.com/questions/20279484/how-to-access-the-correct-this-inside-a-callback)
+  // i use function (not arrow function) because i need to use this keyword (https://stackoverflow.com/questions/20279484/how-to-access-the-correct-this-inside-a-callback)
   this.slug = slugify(this.name, {
     lower: true,
     strict: true,

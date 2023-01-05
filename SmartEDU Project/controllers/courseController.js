@@ -3,7 +3,10 @@ const Category = require('../models/Category');
 
 exports.createCourse = async (req, res) => {
   try {
-    const course = await Course.create(req.body);
+    const course = await Course.create({
+      ...req.body,
+      user: req.session.userID,
+    });
     res.status(201).redirect('/courses');
     // res.status(201).json({
     //   status: 'success',
@@ -29,7 +32,7 @@ exports.getAllCourse = async (req, res) => {
       filter = { category: category._id };
     }
 
-    const courses = await Course.find(filter).sort({ createdAt: -1 });  // -1 for descending order of createdAt
+    const courses = await Course.find(filter).sort({ createdAt: -1 }); // -1 for descending order of createdAt
     const categories = await Category.find();
     res.status(200).render('courses', {
       page_name: 'courses',
@@ -46,7 +49,7 @@ exports.getAllCourse = async (req, res) => {
 
 exports.getCourse = async (req, res) => {
   try {
-    const course = await Course.findOne({ slug: req.params.slug });
+    const course = await Course.findOne({ slug: req.params.slug }).populate('user'); // populate() is used to get the data from the referenced document (https://mongoosejs.com/docs/populate.html)
     res.status(200).render('course', {
       page_name: 'courses',
       course,
