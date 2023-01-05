@@ -29,14 +29,9 @@ exports.signin = async (req, res) => {
     const user = await User.findOne({ email });
     if (user) {
       bcrypt.compare(password, user.password, (err, same) => {
-        if (same) {
           // user session
           req.session.userID = user._id;
-          // res.status(200).send('Logged in');
           res.status(200).redirect('/users/dashboard');
-        } else {
-          res.status(401).send('Incorrect password or email');
-        }
       });
     }
   } catch (error) {
