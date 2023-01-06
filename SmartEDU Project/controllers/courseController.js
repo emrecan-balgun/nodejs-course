@@ -26,14 +26,31 @@ exports.createCourse = async (req, res) => {
 exports.getAllCourse = async (req, res) => {
   try {
     const categorySlug = req.query.category;
-
+    const searchQuery = req.query.search;
     let filter = {};
+
     if (categorySlug) {
       const category = await Category.findOne({ slug: categorySlug });
       filter = { category: category._id };
     }
 
-    const courses = await Course.find(filter).sort({ createdAt: -1 }); // -1 for descending order of createdAt
+    if (searchQuery) {
+      filter = { name: searchQuery };
+    }
+
+    if (!searchQuery && !categorySlug) {
+      filter.name = '';
+      filter.category = null;
+    }
+
+    const courses = await Course.find({
+      $or: [
+        { name: { $regex: '.*' + filter.name + '.*', $options: 'i' } },
+        { category: filter.category },
+      ],
+    })
+      .populate('user')
+      .sort({ createdAt: -1 }); // -1 for descending order of createdAt
     const categories = await Category.find();
     res.status(200).render('courses', {
       page_name: 'courses',
@@ -51,11 +68,15 @@ exports.getAllCourse = async (req, res) => {
 exports.getCourse = async (req, res) => {
   try {
     const user = await User.findById(req.session.userID);
-    const course = await Course.findOne({ slug: req.params.slug }).populate('user'); // populate() is used to get the data from the referenced document (https://mongoosejs.com/docs/populate.html)
+    const course = await Course.findOne({ slug: req.params.slug }).populate(
+      'user'
+    ); // populate() is used to get the data from the referenced document (https://mongoosejs.com/docs/populate.html)
+    const categories = await Category.find();
     res.status(200).render('course', {
       page_name: 'courses',
       course,
       user,
+      categories,
     });
   } catch (error) {
     res.status(400).json({
