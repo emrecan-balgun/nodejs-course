@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const { validationResult } = require('express-validator');
 
 const User = require('../models/User');
 const Category = require('../models/Category');
@@ -7,19 +8,14 @@ const Course = require('../models/Course');
 
 exports.signup = async (req, res) => {
   try {
-    const user = await User.create(req.body);
+    await User.create(req.body);
     res.status(201).redirect('/login');
-    // res.status(201).json({
-    //   status: 'success',
-    //   data: {
-    //     user,
-    //   },
-    // });
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: error,
-    });
+    const errors = validationResult(req);
+    for (let i = 0; i < errors.array().length; i++) {
+      req.flash('error', `${errors.array()[i].msg}`);
+    }
+    res.status(400).redirect('/register');
   }
 };
 
@@ -29,9 +25,9 @@ exports.signin = async (req, res) => {
     const user = await User.findOne({ email });
     if (user) {
       bcrypt.compare(password, user.password, (err, same) => {
-          // user session
-          req.session.userID = user._id;
-          res.status(200).redirect('/users/dashboard');
+        // user session
+        req.session.userID = user._id;
+        res.status(200).redirect('/users/dashboard');
       });
     }
   } catch (error) {
