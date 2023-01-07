@@ -49,7 +49,7 @@ exports.getAllCourse = async (req, res) => {
         { category: filter.category },
       ],
     })
-      .populate('user')
+      .populate('user') // for teacher name
       .sort({ createdAt: -1 }); // -1 for descending order of createdAt
     const categories = await Category.find();
     res.status(200).render('courses', {
