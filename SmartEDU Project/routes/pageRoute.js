@@ -13,5 +13,6 @@ router.route('/login').get(redirectMiddleware, pageController.getLoginPage);
 // if user is logged in, redirectMiddleware will redirect to home page
 // if user is not logged in, pageController will render register or login page
 router.route('/contact').get(pageController.getContactPage);
+router.route('/contact').post(pageController.sendEmail);
 
 module.exports = router;
