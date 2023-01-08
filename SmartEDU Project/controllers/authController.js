@@ -56,10 +56,36 @@ exports.getDashboardPage = async (req, res) => {
   const user = await User.findById(req.session.userID).populate('courses'); // populate() is used to get the data from the referenced document (https://mongoosejs.com/docs/populate.html) // for ex: user.courses
   const courses = await Course.find({ user: req.session.userID }); // for instructor
   const categories = await Category.find();
+  const users = await User.find();
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     user,
     categories,
     courses,
+    users,
   });
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const courses = await Course.find({ user: req.params.id });
+    const students = await User.find({ role: 'student' });
+
+    for (const student of students) {
+      for (const course of courses) {
+        if (student.courses.includes(course._id)) {
+          student.courses.pull(course);
+          await student.save();
+        }
+      }
+    }
+
+    await User.findOneAndRemove({ _id: req.params.id });
+    await Course.deleteMany({ user: req.params.id });
+    req.flash('success', 'User was deleted successfully');
+    res.status(200).redirect('/users/dashboard');
+  } catch (error) {
+    req.flash('error', `${error}`);
+    res.redirect('/users/dashboard');
+  }
 };

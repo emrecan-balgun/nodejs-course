@@ -110,6 +110,7 @@ exports.releaseCourse = async (req, res) => {
 exports.deleteCourse = async (req, res) => {
   try {
     await Course.findOneAndRemove({ slug: req.params.slug });
+    await User.deleteMany({ courses: req.params.id }); // delete all users who have this course
     req.flash('error', `${course.name} has been deleted successfully`);
     res.status(200).redirect('/users/dashboard');
   } catch (error) {

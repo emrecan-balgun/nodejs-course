@@ -30,5 +30,6 @@ router.route('/dashboard').get(authMiddleware, authController.getDashboardPage);
 // firstly authMiddleware will be executed, then authController
 // if user is not logged in, authMiddleware will redirect to login page
 // if user is logged in, authController will render dashboard page
+router.route('/:id').delete(authController.deleteUser); // localhost:3000/users/5f9c1c1c1c1c1c1c1c1c1c1c (id of user)
 
 module.exports = router;
